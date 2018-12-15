@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: face-check
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: face-check
+  namespace: face-check

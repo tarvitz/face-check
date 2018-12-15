@@ -1,0 +1,8 @@
+./k8s
+./hack
+*.iml
+*.idea
+.git
+src/build
+src/*.egg-info
+src/face_check/*.sqlite3

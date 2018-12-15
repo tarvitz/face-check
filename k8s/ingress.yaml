@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+ name: face-check-ingress
+ namespace: face-check
+ annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    #: tls part
+    ingress.kubernetes.io/ssl-redirect: "true"
+    kubernetes.io/tls-acme: "true"
+    certmanager.k8s.io/issuer: face-check-letsencrypt-staging
+    kubernetes.io/ingress.class: "nginx"
+spec:
+ tls:
+ - hosts:
+   - face-check.w40k.net
+   secretName: face-check-staging-letsencrypt
+ rules:
+ - host: face-check.w40k.net
+   http:
+     paths:
+     - path: /
+       backend:
+         serviceName: backend
+         servicePort: 80
