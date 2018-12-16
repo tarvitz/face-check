@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+    {% if user.is_authenticated %}
+        You've logged as {{ user.email }} [<a href="{% url "accounts:logout" %}">logout</a>] <br />
+        {% if user.is_verified %}
+            You are verified, now it's time to take your cookie (follow instructions): <br /> <br />
+            <pre>{{ secret.content | safe }}</pre>
+        {% else %}
+            You are still not verified, it's probably because you have been
+            subscribed not far too long or logged in directly.
+        {% endif %}
+    {% else %}
+        Login with:
+        <li>
+            <a href="{% url "social:begin" "twitch" %}">Twitch</a>
+        </li>
+        <li>
+            <a href="{% url "admin:login" %}">Admin</a>
+        </li>
+        {% comment %}
+        <li>
+            <a href="{% url "social:begin" good-game" %}">Good Game</a>
+        </li>
+        {% endcomment %}
+    {% endif %}
+{% endblock %}

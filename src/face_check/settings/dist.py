@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
-from . utils import get_env_string, rel
+from datetime import datetime
+from . utils import get_env_string, get_env_bool, rel
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -27,10 +28,13 @@ SECRET_KEY = get_env_string(
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = get_env_bool('DEBUG', False)
 
 ALLOWED_HOSTS = get_env_string('ALLOWED_HOSTS', '').split(',')
-
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.twitch.TwitchOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 # Application definition
 
@@ -44,6 +48,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #: internal apps
     'face_check.health.apps.HealthApp',
+    'face_check.accounts.apps.AccountsConfig',
+
+    #: third parties
+    'social_django.config.PythonSocialAuthConfig',
 ]
 
 MIDDLEWARE = [
@@ -61,7 +69,9 @@ ROOT_URLCONF = 'face_check.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            rel('templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -69,6 +79,13 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                #: third parties
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
+
+                #: applications
+                'face_check.accounts.context_processors.secret'
             ],
         },
     },
@@ -83,7 +100,7 @@ WSGI_APPLICATION = 'face_check.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': rel('db.sqlite3'),
     }
 }
 
@@ -93,19 +110,25 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation.'
+                'UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_validation.'
+                'MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.'
+                'CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.'
+                'NumericPasswordValidator',
     },
 ]
 
+#: AUTHENTICATIONS
+AUTH_USER_MODEL = 'accounts.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
@@ -126,3 +149,35 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = get_env_string('STATIC_ROOT', rel('static'))
+
+#: Third party settings
+
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'face_check.social.injector.verify',  #: user bound modification
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
+
+#: Application settings
+
+#: followers should be subscribed to channel not earlier than offset
+FACE_CHECK_DATE_OFFSET = datetime.fromtimestamp(
+    #: 2019-01-01
+    float(get_env_string('FACE_CHECK_DATE_OFFSET', '1546290000.0'))
+)
+
+#: twitch channel (basically it's a user id) to provide a face check against
+TWITCH_FACE_CHECK_CHANNEL = get_env_string(
+    'TWITCH_FACE_CHECK_CHANNEL',
+    '17861167'
+)  #: wellplayedtv1
+
+
+from . secrets import *  # NOQA
+secrets_dummy()  #: just to remove inspections

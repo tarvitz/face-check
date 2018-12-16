@@ -19,7 +19,9 @@ CLASSIFIERS = [
 ]
 
 install_requires = [
-    'Django==2.1.4'
+    'Django==2.1.4',
+    'social-auth-app-django==3.1.0',
+    'python-twitch-client==0.6.0'
 ]
 
 setup(
