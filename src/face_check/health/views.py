@@ -37,3 +37,4 @@ class HealthView(View):
         except Exception:
             return HttpResponse("fail <unhandled exception>",
                                 status=HttpStatus.DOWN)
+        return HttpResponse("ok", status=HttpStatus.OK)

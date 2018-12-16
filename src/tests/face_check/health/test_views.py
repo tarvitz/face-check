@@ -19,7 +19,7 @@ class HealthViewTest(test.TestCase):
     HealthView test case
     """
     def test_health_ok(self):
-        response = self.client.get(reverse('health:status'))
+        response = self.client.get(reverse('health:health'))
         self.assertEqual(response.status_code, HttpStatus.OK)
         self.assertEqual(response.content, b'ok')
 

@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 from datetime import datetime
-from . utils import get_env_string, get_env_bool, rel
+from . utils import get_env_string, get_env_bool, get_env_int, rel
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -99,8 +99,13 @@ WSGI_APPLICATION = 'face_check.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': rel('db.sqlite3'),
+        'ENGINE': get_env_string('DATABASE_ENGINE',
+                                 'django.db.backends.sqlite3'),
+        'NAME': get_env_string('DATABASE_NAME', rel('db.sqlite3')),
+        'USER': get_env_string('DATABASE_USER', ''),
+        'PASSWORD': get_env_string('DATABASE_PASSWORD', ''),
+        'HOST': get_env_string('DATABASE_HOST', ''),
+        'PORT': get_env_int('DATABASE_PORT', 5432)
     }
 }
 

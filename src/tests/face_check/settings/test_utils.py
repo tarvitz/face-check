@@ -43,7 +43,8 @@ class UtilsTestCase(unittest.TestCase):
         with MockEnv({
             'DICT': '{"a": 1}',
             'PYTHON_TYPE_ERROR': 'string',
-            'PYTHON_STRING': '"string"'
+            'PYTHON_STRING': '"string"',
+            'PYTHON_INT': '5432'
         }):
             self.assertEqual(utils._get_literal_from_env('DICT', {}), {'a': 1})
             self.assertEqual(utils._get_literal_from_env(
@@ -52,6 +53,8 @@ class UtilsTestCase(unittest.TestCase):
             self.assertEqual(utils._get_literal_from_env(
                 'PYTHON_STRING', 'fallback'), 'string'
             )
+            self.assertEqual(utils._get_literal_from_env('PYTHON_INT', 0),
+                             5432)
 
     def test_get_env_fallback_assertion(self):
         with self.assertRaises(AssertionError):
@@ -67,6 +70,7 @@ class UtilsTestCase(unittest.TestCase):
         self.assertFalse(utils.get_env_bool('ENV', fallback=False))
         self.assertEqual(utils.get_env_string('ENV', fallback="fallback"),
                          "fallback")
+        self.assertEqual(utils.get_env_int('ENV', fallback=1), 1)
 
     def test_rel(self):
         self.assertNotEqual(utils.rel('static'), '/static/')

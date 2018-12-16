@@ -34,6 +34,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: "face-check"
+            - secretRef:
+                name: "face-check"
           volumeMounts:
             - mountPath: /static
               name: static-volume
