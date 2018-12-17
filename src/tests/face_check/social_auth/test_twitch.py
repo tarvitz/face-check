@@ -18,17 +18,7 @@ from social_core.backends.twitch import TwitchOAuth2
 
 from face_check.consts import HttpStatus
 
-
-class step(object):
-    def __init__(self, message):
-        self.message = message
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        if exc_val:
-            raise exc_val
+from . import step
 
 
 class TwitchLoginTest(TestCase):

@@ -33,6 +33,7 @@ DEBUG = get_env_bool('DEBUG', False)
 ALLOWED_HOSTS = get_env_string('ALLOWED_HOSTS', '').split(',')
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.twitch.TwitchOAuth2',
+    'face_check.social.backends.goodgame.GoodGameOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -166,11 +167,13 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_user',
     'social_core.pipeline.user.get_username',
     'social_core.pipeline.user.create_user',
-    #: note that verification could be a little bit sub-optimal ;)
-    'face_check.social.injector.verify',  #: user bound modification
     'social_core.pipeline.social_auth.associate_user',
     'social_core.pipeline.social_auth.load_extra_data',
-    'social_core.pipeline.user.user_details'
+    'social_core.pipeline.user.user_details',
+    #: order is prior, twitch could be used after create_user,
+    #: gg requires social auth token
+    #: note that verification could be a little bit sub-optimal ;)
+    'face_check.social.injector.verify',  #: user bound modification
 )
 
 #: Application settings
@@ -186,6 +189,14 @@ TWITCH_FACE_CHECK_CHANNEL = get_env_string(
     'TWITCH_FACE_CHECK_CHANNEL',
     '17861167'
 )  #: wellplayedtv1
+
+#: good game (player identifier, could be fetched from
+#: https://goodgame.ru/api/getggchannelstatus?id=<channel_name>&fmt=json
+#: where channel_name is a public channel name
+GOOD_GAME_FACE_CHECK_CHANNEL = get_env_string(
+    'GOOD_GAME_FACE_CHECK_CHANNEL',
+    '1850'
+)
 
 
 from . secrets import *  # NOQA
