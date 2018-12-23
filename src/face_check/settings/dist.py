@@ -14,7 +14,6 @@ import os
 from datetime import datetime
 from . utils import get_env_string, get_env_bool, get_env_int, rel
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -201,6 +200,8 @@ GOOD_GAME_FACE_CHECK_CHANNEL = get_env_string(
     '1850'
 )
 
-
-from . secrets import *  # NOQA
-secrets_dummy()  #: just to remove inspections
+#: import secrets settings
+try:
+    from . secrets import *  # NOQA
+except ImportError:
+    pass

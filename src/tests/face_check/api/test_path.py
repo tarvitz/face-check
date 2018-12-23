@@ -96,7 +96,6 @@ class HelpersTest(TestCase):
         """
         Tests traverse dict and object like entries
         """
-        self.assertEqual(path.traverse(self.dummy, 'foo'), self.dummy.foo()
-        )
+        self.assertEqual(path.traverse(self.dummy, 'foo'), self.dummy.foo())
         self.assertEqual(path.traverse(self.dummy_dict, 'foo'),
                          self.dummy_dict['foo']())

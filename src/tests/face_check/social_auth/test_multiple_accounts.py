@@ -14,7 +14,6 @@ from unittest import mock
 from django.urls import reverse
 from django.test import TestCase
 
-from django.db.models import Q
 from django.contrib.auth import get_user_model
 
 from social_django.models import UserSocialAuth
@@ -117,7 +116,7 @@ class MultipleAccountsAuthTest(ResourceMixin, OAuth2MockMixin, TestCase):
             #: note that each social backend should have to be linked into
             #: single user email, in case of face-check tarvitz@blacklibrary.ru
             #: email address is used.
-            user = self.user_model.objects.get(email='tarvitz@blacklibrary.ru')
+
             #: once good game returns email properly account will be associated
             #: twitch + good game explicitly check
             self.assertEqual(
