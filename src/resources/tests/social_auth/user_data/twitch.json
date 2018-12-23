@@ -1,0 +1,14 @@
+{
+  "display_name": "NickolasFox",
+  "_id": 74767317,
+  "name": "nickolasfox",
+  "type": "user",
+  "bio": "Teh pirate",
+  "created_at": "2014-11-08T19:58:27Z",
+  "updated_at": "2018-12-15T20:11:41Z",
+  "logo": "https://static-cdn.jtvnw.net/jtv_user_pictures/nickolasfox-profile_image-a6a3363661a933f9-300x300.png",
+  "_links": {"self": "https://api.twitch.tv/kraken/users/nickolasfox"},
+  "email": "tarvitz@blacklibrary.ru",
+  "partnered": false,
+  "notifications": {"push": true, "email": true}
+}

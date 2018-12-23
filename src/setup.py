@@ -29,7 +29,7 @@ setup(
     author='Nickolas Fox <tarvitz@blacklibrary.ru>',
     version=version,
     author_email='tarvitz@blacklibrary.ru',
-    description='WellPlayed TV face check',
+    description='WellPlayed TV Face Check',
     long_description="",
     license='Other/Proprietary License',
     platforms=['OS Independent'],

@@ -12,6 +12,8 @@ class GoodGameOAuth2(oauth.BaseOAuth2):
     AUTHORIZATION_URL = 'https://api2.goodgame.ru/oauth/authorize'
     ACCESS_TOKEN_URL = 'https://api2.goodgame.ru/oauth'
     ACCESS_TOKEN_METHOD = 'POST'
+    #: TODO await when GG provide email user retrieve through scope
+    #: https://goodgame.ru/topic/67865#comment427
     DEFAULT_SCOPE = ['channel.subscribers']
     REDIRECT_STATE = False
 
@@ -21,12 +23,15 @@ class GoodGameOAuth2(oauth.BaseOAuth2):
     def get_user_details(self, response):
         return {
             'username': response['user'].get('username'),
-            #: no email directly could be fetched
+            #: currently there's no email
+            'email': response['user'].get('email'),
             'first_name': '',
             'last_name': ''
         }
 
     def user_data(self, access_token, *args, **kwargs):
+        #: treat this as hacky as far as simple info does not return
+        #: email address, but we can retrieve it from another endpoint
         return self.get_json(
             'https://api2.goodgame.ru/info',
             params={'access_token': access_token}

@@ -1,5 +1,7 @@
 from operator import eq, lt, gt, le, ge, ne
 
+from . path import traverse
+
 
 op_map = {
     'eq': eq,
@@ -13,7 +15,7 @@ op_map = {
 }
 
 
-def and_expression(payload, **query):
+def expression(payload, **query):
     """
     Simply traverses over payload (one level depth) and query filters
     verifying payload fields with operations passed over query entries
@@ -30,19 +32,25 @@ def and_expression(payload, **query):
 
     :param dict payload:
     :param dict query:
-    :rtype: bool
-    :return: True if all query applied upon payload with True result
     """
-    get = payload.get
     for raw_field, value in query.items():
-        if '__' in raw_field:
-            field, op = raw_field.split('__')
+        path_chunks = raw_field.split('__')
+        #: default operation
+        op = 'eq'
+        if path_chunks[-1] in op_map.keys():
+            op = path_chunks[-1]
+            path = ".".join(path_chunks[:-1])
         else:
-            op = 'eq'
-            field = raw_field
-        assert op in op_map, "Operation '%s' is not supported" % op
+            path = ".".join(path_chunks)
+        yield op_map[op](traverse(payload, path), value)
 
-        if not op_map[op](get(field), value):
-            return False
-    else:
-        return True
+
+#: in case if you need something more sophisticated, consider implementing
+#: or taking django.db.models.Q interface to construct logical expressions
+#: from user perspective
+def and_expression(payload, **query):
+    return all(expression(payload, **query))
+
+
+def or_expression(payload, **query):
+    return any(expression(payload, **query))

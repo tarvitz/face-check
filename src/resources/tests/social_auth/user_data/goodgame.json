@@ -1,0 +1,22 @@
+{
+  "token": {
+    "scopes": ["channel.subscribers"],
+    "expires": 1545159705
+  },
+  "user": {
+    "user_id": "1013883",
+    "username": "nickolasfox",
+    "_description": "GG has no email yet, however auth backend supports email field if it will appear some other day",
+    "no-email": "tarvitz@blacklibrary.ru"
+  },
+  "channel": {
+    "channel": null,
+    "channel_id": null,
+    "src": null
+  },
+  "_links": {
+    "self": {
+      "href": "https://api2.goodgame.ru/info"
+    }
+  }
+}

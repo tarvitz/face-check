@@ -13,13 +13,13 @@ metadata:
 spec:
  tls:
  - hosts:
-   - face-check.w40k.net
+   - face-check-staging.w40k.net
    secretName: face-check-staging-letsencrypt
  rules:
- - host: face-check.w40k.net
+ - host: face-check-staging.w40k.net
    http:
      paths:
      - path: /
        backend:
-         serviceName: backend
+         serviceName: backend-staging
          servicePort: 80

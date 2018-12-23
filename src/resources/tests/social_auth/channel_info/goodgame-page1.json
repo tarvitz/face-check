@@ -1,0 +1,26 @@
+{
+  "_links": {
+    "self": {
+      "href": "https://api2.goodgame.ru/channel/157513/subscribers?page=1"
+    },
+    "first": {
+      "href": "https://api2.goodgame.ru/channel/157513/subscribers"
+    },
+    "last": {
+      "href": "https://api2.goodgame.ru/channel/157513/subscribers?page=3"
+    }
+  },
+  "_embedded": {
+    "subscribers": [
+      {
+        "id": "22909",
+        "username": "WellPlayedTV",
+        "created_at": "1545588217"
+      }
+    ]
+  },
+  "page_count": 1,
+  "page_size": 1,
+  "total_items": 3,
+  "page": 1
+}

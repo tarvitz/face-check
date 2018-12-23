@@ -1,0 +1,26 @@
+{
+  "_links": {
+    "self": {
+      "href": "https://api2.goodgame.ru/channel/157513/subscribers?page=3"
+    },
+    "first": {
+      "href": "https://api2.goodgame.ru/channel/157513/subscribers"
+    },
+    "last": {
+      "href": "https://api2.goodgame.ru/channel/157513/subscribers?page=3"
+    }
+  },
+  "_embedded": {
+    "subscribers": [
+      {
+        "id": "338631",
+        "username": "Stazyi",
+        "created_at": "1545597059"
+      }
+    ]
+  },
+  "page_count": 1,
+  "page_size": 1,
+  "total_items": 1,
+  "page": 3
+}

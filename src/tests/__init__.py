@@ -1,4 +1,7 @@
 import os
+import json
+
+from face_check.consts import HttpStatus
 
 _BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 RESOURCE_DIR = os.path.join(_BASE_DIR, 'resources/tests')
@@ -27,3 +30,18 @@ class ResourceMixin(object):
         :return: path to resource
         """
         return open(ResourceMixin.get_resource_path(rel_path), mode)
+
+
+class FakeResponse(object):
+    """
+    Very tiny :py:class:`requests.Response` mock class
+    """
+    def __init__(self, content,
+                 content_type='application/json',
+                 status=HttpStatus.OK):
+        self.status_code = status
+        self.content_type = content_type
+        self.content = content
+
+    def json(self):
+        return json.loads(self.content)

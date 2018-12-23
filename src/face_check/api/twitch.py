@@ -9,10 +9,10 @@ Module shortcuts and abbreviations:
 import twitch
 import requests.models
 
-from . import filters
+from . import base
 
 
-class TwitchVerifier(object):
+class TwitchVerifier(base.SimpleVerifier):
     """
     >>> from datetime import datetime
     >>> offset = datetime(2019, 1, 1)
@@ -47,17 +47,6 @@ class TwitchVerifier(object):
         except requests.models.HTTPError:
             return None
 
-    def verify(self, **query):
-        """
-        Verifies if user is subscribed to channel id
-
-        :rtype: bool
-        :return: True if user passed subscribed follows validation
-        """
-        follows = self._get_user_follow(user_id=self.uid,
-                                        channel_id=self.channel_id)
-        if follows is None:
-            return False
-
-        #: straight forward validation pipeline
-        return filters.and_expression(payload=follows, **query)
+    def get_follower_info(self):
+        return self._get_user_follow(channel_id=self.channel_id,
+                                     user_id=self.uid)
