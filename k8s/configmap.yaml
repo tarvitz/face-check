@@ -12,7 +12,6 @@ data:
   DATABASE_USER: "face_check"
   DATABASE_NAME: "face_check"
   DATABASE_PORT: "5432"
-  DEBUG: "True"
+  DEBUG: "False"
 
-  # SQLITE_DB_LOCATION: "/db/sqlite.db"
   STATIC_ROOT: "/static/"
