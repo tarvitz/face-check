@@ -1,0 +1,74 @@
+{
+  "kind": "plus#person",
+  "etag": "\"jb1Xzanox6i8Zyse4DcYD8sZqy0/_Dlwhu5qqOn_Jws8ZNZ5RpV2esE\"",
+  "gender": "male",
+  "emails": [
+    {
+      "value": "tarvitz@blacklibrary.ru",
+      "type": "account"
+    }
+  ],
+  "objectType": "person",
+  "id": "105882381542477835025",
+  "displayName": "Nickolas Fox",
+  "name": {
+    "familyName": "Fox",
+    "givenName": "Nickolas"
+  },
+  "tagline": "Капитально перекрыт",
+  "url": "https://plus.google.com/+NickolasFox",
+  "image": {
+    "url": "https://lh5.googleusercontent.com/-bwkuo-a6LJE/AAAAAAAAAAI/AAAAAAAAAO4/FewmjKdb4Xw/photo.jpg?sz=50",
+    "isDefault": false
+  },
+  "organizations": [
+    {
+      "name": "фриланс",
+      "title": "software нигра-девелопер",
+      "type": "work",
+      "startDate": "2011",
+      "endDate": "2016",
+      "primary": false
+    },
+    {
+      "name": "Ninja AdTech Company",
+      "title": "API Tech Lead",
+      "type": "work",
+      "startDate": "2017",
+      "primary": true
+    },
+    {
+      "name": "Ninja AdTech Company",
+      "title": "Senior Python Dev",
+      "type": "work",
+      "startDate": "2016",
+      "endDate": "2017",
+      "primary": false
+    }
+  ],
+  "placesLived": [
+    {
+      "value": "Москва",
+      "primary": true
+    },
+    {
+      "value": "Санкт-Петербург"
+    }
+  ],
+  "isPlusUser": true,
+  "language": "ru",
+  "circledByCount": 0,
+  "verified": false,
+  "cover": {
+    "layout": "banner",
+    "coverPhoto": {
+      "url": "https://lh3.googleusercontent.com/o-qGtmYcf-JLFeKfaO6AIDvlPe-i33baMgkolPUjbVa8AgVV7_0jT7pAbxjioa2KedOdGVkseMmF=s630-fcrop64=1,203d2eaddf83d151",
+      "height": 624,
+      "width": 940
+    },
+    "coverInfo": {
+      "topImageOffset": 0,
+      "leftImageOffset": 0
+    }
+  }
+}

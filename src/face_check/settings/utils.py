@@ -40,6 +40,21 @@ def get_env_bool(env_key, fallback):
     return bool(_get_literal_from_env(env_key, fallback))
 
 
+def get_env_int(env_key, fallback):
+    """
+    reads boolean literal from environment.
+
+    Please note that 0, [], {}, '' treats as False
+
+    :param str env_key: key to read
+    :param int fallback: fallback value
+    :rtype: int
+    :return: environment value typed in bool
+    """
+    assert isinstance(fallback, int), "fallback should be int instance"
+    return _get_literal_from_env(env_key, fallback)
+
+
 def get_env_string(env_key, fallback):
     """
     reads boolean literal from environment. (does not use literal compilation

@@ -2,3 +2,5 @@ __pycache__
 *.py[co]
 *.iml
 *.idea
+**/settings/local.py
+**/db.sqlite3

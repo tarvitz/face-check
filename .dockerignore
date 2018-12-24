@@ -6,3 +6,5 @@
 src/build
 src/*.egg-info
 src/face_check/*.sqlite3
+#: remove local configuration from build
+src/face_check/settings/local.py
