@@ -17,6 +17,9 @@ from . utils import get_env_string, get_env_bool, get_env_int, rel
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+ADMINS = (
+    ('Nickolas Fox', 'tarvitz@blacklibrary.ru'),
+)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -149,6 +152,28 @@ USE_L10N = True
 
 USE_TZ = True
 
+#: LOGGING
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'include_html': True,
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': get_env_string('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+    },
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
@@ -200,6 +225,16 @@ FACE_CHECK_CHANNEL = {
                               'UCPaeupA8OX9DDnhLvywRKBw')
 
 }
+
+#: EMAIL settings
+EMAIL_HOST = get_env_string('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_HOST_USER = get_env_string('EMAIL_HOST_USER',
+                                 'astropath@blacklibrary.ru')
+EMAIL_PORT = get_env_int('EMAIL_PORT', 587)
+EMAIL_USE_TLS = get_env_bool('EMAIL_USE_TLS', True)
+DEFAULT_FROM_EMAIL = get_env_string(
+    'DEFAULT_FROM_EMAIL', 'AstroPath (no replay) <astropath@blacklibrary.ru>'
+)
 
 #: import secrets settings
 try:
