@@ -1,0 +1,36 @@
+{
+  "kind": "youtube#subscriptionListResponse",
+  "etag": "\"XI7nbFXulYBIpL0ayR_gDh3eu1k/P-UqcB_yFwpCw16h0O0UBZSmG3c\"",
+  "pageInfo": {
+    "totalResults": 1,
+    "resultsPerPage": 50
+  },
+  "items": [
+    {
+      "kind": "youtube#subscription",
+      "etag": "\"XI7nbFXulYBIpL0ayR_gDh3eu1k/4F7deUgcl6VQO6Tt4OqMxYBYtNI\"",
+      "id": "b8NBIZOekcDnyEsKWmzEE28u0KCc_BmsS6-MSwhDmm4",
+      "snippet": {
+        "publishedAt": "2017-05-14T21:21:36.000Z",
+        "title": "WellPlayedTV",
+        "description": "Добро пожаловать!!! Мы рады приветствовать вас, располагайтесь поудобнее потому что сейчас вы окунетесь в нами любимый, мир компьютерных игр. У нас вы увидите стримы как по соревновательным играм, так и просто по приятным классическим играм. Наша задача, чтобы вы приятно провели время!\nДля получения самой актуальной информации и чтобы всегда быть рядом =) держите наши ссылки на социальные ресурсы:\nhttps://vk.com/wellplayedtv\nhttp://goodgame.ru/channel/Enillydd/\nhttp://www.twitch.tv/wellplayedtv1",
+        "resourceId": {
+          "kind": "youtube#channel",
+          "channelId": "UCPaeupA8OX9DDnhLvywRKBw"
+        },
+        "channelId": "UCxzRglLsD1K82cFllMDzRiA",
+        "thumbnails": {
+          "default": {
+            "url": "https://yt3.ggpht.com/-BbyGXe8OlyQ/AAAAAAAAAAI/AAAAAAAAAAA/EaXe2nUP33o/s88-c-k-no-mo-rj-c0xffffff/photo.jpg"
+          },
+          "medium": {
+            "url": "https://yt3.ggpht.com/-BbyGXe8OlyQ/AAAAAAAAAAI/AAAAAAAAAAA/EaXe2nUP33o/s240-c-k-no-mo-rj-c0xffffff/photo.jpg"
+          },
+          "high": {
+            "url": "https://yt3.ggpht.com/-BbyGXe8OlyQ/AAAAAAAAAAI/AAAAAAAAAAA/EaXe2nUP33o/s800-c-k-no-mo-rj-c0xffffff/photo.jpg"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -11,6 +11,7 @@ and basic corner cases.
 import json
 from unittest import mock
 
+from django.db.models import Q
 from django.urls import reverse
 from django.test import TestCase
 
@@ -18,13 +19,17 @@ from django.contrib.auth import get_user_model
 
 from social_django.models import UserSocialAuth
 from social_core.backends.twitch import TwitchOAuth2
+from social_core.backends.google import GoogleOAuth2
 from social_core.backends.oauth import OAuthAuth, BaseOAuth2
 
 from face_check.consts import HttpStatus
 from face_check.api.goodgame import GoodGameVerifier
+from face_check.api.youtube import YoutubeVerifier
+from face_check.api.twitch import TwitchVerifier
 from face_check.social.backends.goodgame import GoodGameOAuth2
 
 from . import step, OAuth2MockMixin
+from .. fixtures.twitch import TWITCH_FOLLOWER_INFO
 from ... import ResourceMixin, FakeResponse
 
 
@@ -41,7 +46,8 @@ class MultipleAccountsAuthTest(ResourceMixin, OAuth2MockMixin, TestCase):
         cls.user_model = get_user_model()
         cls.auth_urls_complete = {
             'goodgame': reverse("social:complete", args=("goodgame", )),
-            'twitch': reverse('social:complete', args=('twitch', ))
+            'youtube': reverse('social:complete', args=('google-oauth2', )),
+            'twitch': reverse('social:complete', args=('twitch', )),
         }
         cls.user_data = {
             'twitch': json.load(
@@ -49,6 +55,9 @@ class MultipleAccountsAuthTest(ResourceMixin, OAuth2MockMixin, TestCase):
             ),
             'goodgame': json.load(
                 cls.get_resource('social_auth/user_data/goodgame.json')
+            ),
+            'youtube': json.load(
+                cls.get_resource('social_auth/user_data/youtube.json')
             )
         }
 
@@ -60,18 +69,31 @@ class MultipleAccountsAuthTest(ResourceMixin, OAuth2MockMixin, TestCase):
                 content = f.read()
 
             good_game_channel_info.append(FakeResponse(content=content))
+        youtube_subscription = json.load(
+            cls.get_resource('social_auth/channel_info/'
+                             'youtube-subscription.json')
+        )
+
         cls.aux = {
-            'channel_info_goodgame': good_game_channel_info
+            'goodgame-channel_info': good_game_channel_info,
+            'youtube-subscription': youtube_subscription,
+            'twitch-follows': TWITCH_FOLLOWER_INFO
         }
         super().setUpClass()
 
     @mock.patch.object(OAuthAuth, 'validate_state')
     @mock.patch.object(BaseOAuth2, 'request_access_token')
     @mock.patch.object(GoodGameOAuth2, 'user_data')
+    @mock.patch.object(GoogleOAuth2, 'user_data')
     @mock.patch.object(TwitchOAuth2, 'user_data')
     @mock.patch.object(GoodGameVerifier, '_get_channel_subscribers')
-    def test_multiple_auth(self, mock_good_game_verifier,
+    @mock.patch.object(YoutubeVerifier, '_get_subscription')
+    @mock.patch.object(TwitchVerifier, '_get_user_follow')
+    def test_multiple_auth(self, mock_twitch_verifier,
+                           mock_youtube_verifier,
+                           mock_good_game_verifier,
                            mock_twitch_user_data,
+                           mock_youtube_user_data,
                            mock_good_game_user_data,
                            mock_request_access_token,
                            mock_validate_state):
@@ -81,14 +103,30 @@ class MultipleAccountsAuthTest(ResourceMixin, OAuth2MockMixin, TestCase):
             mock_request_access_token.return_value = self.auth_response
             #: user data received from auth service
             mock_good_game_user_data.return_value = self.user_data['goodgame']
+            mock_youtube_user_data.return_value = self.user_data['youtube']
             mock_twitch_user_data.return_value = self.user_data['twitch']
 
             #: mocks get player information
+            mock_twitch_verifier.return_value = self.aux['twitch-follows']
+            mock_youtube_verifier.return_value = \
+                self.aux['youtube-subscription']
             mock_good_game_verifier.side_effect = \
-                self.aux['channel_info_goodgame']
+                self.aux['goodgame-channel_info']
 
         with step("Authentication process Twitch"):
             response = self.client.get(self.auth_urls_complete['twitch'],
+                                       data=self.oauth_response, follow=True)
+            self.assertEqual(response.status_code, HttpStatus.OK)
+            context = response.context
+            self.assertTrue(context['user'].is_authenticated)
+            with step('check twitch social bound'):
+                self.assertEqual(context['user'].email,
+                                 'tarvitz@blacklibrary.ru')
+            with step('logout'):
+                self.client.logout()
+
+        with step("Authentication process Youtube"):
+            response = self.client.get(self.auth_urls_complete['youtube'],
                                        data=self.oauth_response, follow=True)
             self.assertEqual(response.status_code, HttpStatus.OK)
             context = response.context
@@ -126,4 +164,22 @@ class MultipleAccountsAuthTest(ResourceMixin, OAuth2MockMixin, TestCase):
             self.assertEqual(
                 UserSocialAuth.objects.filter(provider='twitch').count(),
                 1
+            )
+            self.assertEqual(
+                UserSocialAuth.objects.filter(
+                    provider='google-oauth2').count(),
+                1
+            )
+        with step('check accounts association'):
+            #: google and twitch should be associated with single internal
+            #: user. (GG would be associated too as far as they provide
+            #: email address in user details)
+            social_account = UserSocialAuth.objects.filter(
+                provider='twitch').get()
+            user = social_account.user
+            self.assertEqual(
+                user.social_auth.filter(
+                    Q(provider='twitch') | Q(provider='google-oauth2')
+                ).count(),
+                2
             )

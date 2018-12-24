@@ -16,14 +16,18 @@
         </li>
         <li>
             <a href="{% url "social:begin" "goodgame" %}">Good Game</a>
+            <div class="info">
+                Please consider up-voting
+                <a href="https://goodgame.ru/topic/67865#comment427">this thread</a> to
+                increase good game experience, as far as it has some blockers and
+                supported in very basic mode.
+            </div>
         </li>
         <li>
-            <a href="{% url "admin:login" %}">Admin</a>
+            <a href="{% url "social:begin" "google-oauth2" %}">Google (Youtube)</a>
         </li>
-        {% comment %}
         <li>
-            <a href="{% url "social:begin" good-game" %}">Good Game</a>
+            <a href="{% url "admin:login" %}">Sign In</a>
         </li>
-        {% endcomment %}
     {% endif %}
 {% endblock %}

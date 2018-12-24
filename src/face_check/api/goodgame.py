@@ -1,6 +1,7 @@
 import requests
 
 from urllib import parse
+from datetime import datetime, timedelta
 
 from . import base, path
 
@@ -26,6 +27,12 @@ def _get_last_page(payload):
 
 
 class GoodGameVerifier(base.SimpleVerifier):
+    """
+    Half verifier - half small api base client for good game.
+    Please don't extend internal API calls, once any severe modification
+    of :py:class:`GoodGameVerifier` extend required please move everything
+    related to Good Game API to separate class or set of classes
+    """
     methods = {
         'channel_subscribers': '_get_channel_subscribers'
     }
@@ -34,7 +41,6 @@ class GoodGameVerifier(base.SimpleVerifier):
         self.access_token = access_token
         self.channel_id = channel_id
         self.uid = uid
-        self._followers_cache = None
         self.headers = {
             'Authorization': 'Bearer {}'.format(self.access_token)
         }
@@ -59,7 +65,7 @@ class GoodGameVerifier(base.SimpleVerifier):
 
     def pages(self, method):
         """
-        Iterate over API
+        Iterate over paginated API responses
 
         :param str method: registered API method
         :rtype: list
@@ -93,4 +99,12 @@ class GoodGameVerifier(base.SimpleVerifier):
                     #: cheat :)
                     sub['created_at'] = float(sub['created_at'])
                     return sub
-        return {}
+        #: in case if no one was found return follower looking like information
+        #: with fake data to process, it's not good decision to fake it,
+        #: however as part of simple verification it's better to keep it
+        #: instead of making bunch of extra validations
+        return {
+            'uid': -1,
+            'created_at': (datetime.now() + timedelta(days=1)).timestamp(),
+            'username': 'not-found'
+        }

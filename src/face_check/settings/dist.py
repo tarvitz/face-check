@@ -32,6 +32,7 @@ DEBUG = get_env_bool('DEBUG', False)
 ALLOWED_HOSTS = get_env_string('ALLOWED_HOSTS', '').split(',')
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.twitch.TwitchOAuth2',
+    'social_core.backends.google.GoogleOAuth2',
     'face_check.social.backends.goodgame.GoodGameOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
@@ -178,6 +179,11 @@ SOCIAL_AUTH_PIPELINE = (
     'face_check.social.injector.verify',  #: user bound modification
 )
 
+#: extra scope for socials
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    'https://www.googleapis.com/auth/youtube.readonly'
+]
+
 #: Application settings
 
 #: followers should be subscribed to channel not earlier than offset
@@ -186,19 +192,14 @@ FACE_CHECK_DATE_OFFSET = datetime.fromtimestamp(
     float(get_env_string('FACE_CHECK_DATE_OFFSET', '1546290000.0'))
 )
 
-#: twitch channel (basically it's a user id) to provide a face check against
-TWITCH_FACE_CHECK_CHANNEL = get_env_string(
-    'TWITCH_FACE_CHECK_CHANNEL',
-    '17861167'
-)  #: wellplayedtv1
+#: wptv
+FACE_CHECK_CHANNEL = {
+    'goodgame': get_env_string('FACE_CHECK_CHANNEL_GOODGAME', '1850'),
+    'twitch': get_env_string('FACE_CHECK_CHANNEL_TWITCH', '17861167'),
+    'youtube': get_env_string('FACE_CHECK_CHANNEL_YOUTUBE',
+                              'UCPaeupA8OX9DDnhLvywRKBw')
 
-#: good game (player identifier, could be fetched from
-#: https://goodgame.ru/api/getggchannelstatus?id=<channel_name>&fmt=json
-#: where channel_name is a public channel name
-GOOD_GAME_FACE_CHECK_CHANNEL = get_env_string(
-    'GOOD_GAME_FACE_CHECK_CHANNEL',
-    '1850'
-)
+}
 
 #: import secrets settings
 try:

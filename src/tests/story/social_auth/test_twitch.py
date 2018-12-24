@@ -18,8 +18,10 @@ from social_core.backends.oauth import OAuthAuth, BaseOAuth2
 from social_core.backends.twitch import TwitchOAuth2
 
 from face_check.consts import HttpStatus
+from face_check.api.twitch import TwitchVerifier
 
 from . import step, OAuth2MockMixin
+from .. fixtures.twitch import TWITCH_FOLLOWER_INFO
 from ... import ResourceMixin
 
 
@@ -44,7 +46,9 @@ class TwitchLoginTest(ResourceMixin, OAuth2MockMixin, TestCase):
     @mock.patch.object(OAuthAuth, 'validate_state')
     @mock.patch.object(BaseOAuth2, 'request_access_token')
     @mock.patch.object(TwitchOAuth2, 'user_data')
-    def test_create_user(self, mock_user_data,
+    @mock.patch.object(TwitchVerifier, '_get_user_follow')
+    def test_create_user(self, mock_twitch_verifier,
+                         mock_user_data,
                          mock_request_access_token,
                          mock_validate_state):
         with step("environment setup"):
@@ -53,6 +57,9 @@ class TwitchLoginTest(ResourceMixin, OAuth2MockMixin, TestCase):
             mock_request_access_token.side_effect = [self.auth_response]
             #: user data received from auth service
             mock_user_data.side_effect = [self.user_data]
+
+            #: follower info
+            mock_twitch_verifier.return_value = TWITCH_FOLLOWER_INFO
 
         with step("authorization process OAuth2"):
             response = self.client.get(self.auth_url_complete,
