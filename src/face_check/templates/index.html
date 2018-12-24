@@ -1,33 +1,98 @@
 {% extends "base.html" %}
-{% block content %}
+{% block header %}
     {% if user.is_authenticated %}
-        You've logged as {{ user.email }} [<a href="{% url "accounts:logout" %}">logout</a>] <br />
-        {% if user.is_verified %}
-            You are verified, now it's time to take your cookie (follow instructions): <br /> <br />
-            <pre>{{ secret.content | safe }}</pre>
-        {% else %}
-            You are still not verified, it's probably because you have been
-            subscribed not far too long or logged in directly.
+        <a class="nav-link" href="{% url "accounts:logout" %}">Logout</a>
+        {% if user.is_staff %}
+            <a class="nav-link" href="{% url "admin:index" %}">Admin</a>
         {% endif %}
     {% else %}
-        Login with:
-        <li>
-            <a href="{% url "social:begin" "twitch" %}">Twitch</a>
-        </li>
-        <li>
-            <a href="{% url "social:begin" "goodgame" %}">Good Game</a>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <p class="lead">
+            You've logged as <span class="badge badge-light">{{ user.email }}</span>
+        </p>
+        {% if user.is_verified %}
+            <p class="lead">You are verified, now it's time to take your cookie (follow instructions): </p>
+            <div class="alert alert-success">{{ secret.content | safe }}</div>
+        {% else %}
             <div class="info">
-                Please consider up-voting
-                <a href="https://goodgame.ru/topic/67865#comment427">this thread</a> to
-                increase good game experience, as far as it has some blockers and
-                supported in very basic mode.
+                You are still not verified, it's probably because you have been
+                subscribed not far too long or logged in directly.
             </div>
-        </li>
-        <li>
-            <a href="{% url "social:begin" "google-oauth2" %}">Google (Youtube)</a>
-        </li>
-        <li>
-            <a href="{% url "admin:login" %}">Sign In</a>
-        </li>
+        {% endif %}
+    {% else %}
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">@</th>
+                <th scope="col">Authentication</th>
+                <th scope="col">Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>
+                    <a href="{% url "social:begin" "twitch" %}">
+                        <svg overflow="visible" width="32px" height="32px"
+                             version="1.1" viewBox="0 0 30 30" x="0px" y="0px">
+                            <g>
+                                <path d="M4,7 L5.56799,3 L27,3 L27,18 L21,24 L16,24
+                                         L12.88599,27 L9,27 L9,24 L4,24 L4,7 Z M21,20
+                                         L25,16 L25,5 L8,5 L8,20 L12,20 L12,23 L15,20 L21,20 Z" />
+                                <g><polygon points="21 9 19 9 19 15 21 15" />
+                                    <polygon points="16 9 14 9 14 15 16 15" />
+                                </g>
+                            </g>
+                        </svg>
+                    </a>
+                </td>
+                <td>
+                    <a href="{% url "social:begin" "twitch" %}">Twitch</a>
+                </td>
+                <td>Authenticate with help of your twitch account</td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td>
+                    <a href="{% url "social:begin" "google-oauth2" %}">
+                        <img src="https://www.gstatic.com/youtube/img/branding/favicon/favicon_48x48.png" width="32px"  height="32px"/>
+                    </a>
+                </td>
+                <td>
+                    <a href="{% url "social:begin" "google-oauth2" %}">Youtube</a>
+                </td>
+                <td>Authenticate with help of your youtube account</td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td>
+                    <a href="{% url "social:begin" "goodgame" %}">
+                        <img src="https://static.goodgame.ru/images/svg/new-logo.svg"
+                             width="32px" height="32px"/>
+                    </a>
+                </td>
+                <td><a href="{% url "social:begin" "goodgame" %}">Good Game</a></td>
+                <td>
+                    <div class="alert alert-dark">
+                    Please consider up-voting
+                        <a href="https://goodgame.ru/topic/67865#comment427">this thread</a> to
+                        increase good game experience, as far as it has some blockers and
+                        supported in very basic mode.
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">4</th>
+                <td></td>
+                <td><a href="{% url "admin:login" %}">Sign In</a></td>
+                <td>Sign in using username and password (if you know them ;)</td>
+            </tr>
+            </tbody>
+        </table>
     {% endif %}
 {% endblock %}
