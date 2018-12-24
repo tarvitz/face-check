@@ -9,7 +9,7 @@ CLASSIFIERS = [
     'Environment :: Web Environment',
     'Intended Audience :: Developers',
     'Indented Audience :: System Administrators',
-    'License :: Other/Proprietary License',
+    'License :: OSI Approved :: BSD License',
     'Operating System :: OS Independent',
     'Programming Language :: Python',
     'Natural Language :: English',
@@ -19,8 +19,10 @@ CLASSIFIERS = [
 ]
 
 install_requires = [
+    #: BSD licenses
     'Django==2.1.4',
     'social-auth-app-django==3.1.0',
+    #: MIT licenses
     'python-twitch-client==0.6.0'
 ]
 
@@ -31,18 +33,13 @@ setup(
     author_email='tarvitz@blacklibrary.ru',
     description='WellPlayed TV Face Check',
     long_description="",
-    license='Other/Proprietary License',
+    license='BSD',
     platforms=['OS Independent'],
     classifiers=CLASSIFIERS,
     install_requires=install_requires,
     packages=find_packages(
-        exclude=['tests', 'requirements']
+        exclude=['tests', 'requirements', 'resources']
     ),
-    package_data={
-        '': ['static/css/*', 'static/img/*', 'static/js/*', 'templates/*',
-             'conf/*']
-    },
-    include_package_data=True,
     entry_points={
         'console_scripts': [
             'site-manage = face_check.manage:main',
