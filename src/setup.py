@@ -4,6 +4,7 @@ from setuptools import setup, find_packages
 
 version = "0.1"
 
+
 CLASSIFIERS = [
     'Development Status :: 4 - Beta',
     'Environment :: Web Environment',
@@ -26,6 +27,18 @@ install_requires = [
     'python-twitch-client==0.6.0'
 ]
 
+
+class ExtraRequirements(object):
+    sentry = ['raven']
+    #: all extra dependencies
+    all = sentry
+
+
+extras_require = {
+    'all': ExtraRequirements.all,
+    'sentry': ExtraRequirements.sentry,
+}
+
 setup(
     name='face-check',
     author='Nickolas Fox <tarvitz@blacklibrary.ru>',
@@ -38,7 +51,7 @@ setup(
     classifiers=CLASSIFIERS,
     install_requires=install_requires,
     packages=find_packages(
-        exclude=['tests', 'requirements', 'resources']
+        exclude=('tests', 'resources')
     ),
     entry_points={
         'console_scripts': [
@@ -49,6 +62,7 @@ setup(
         '': ['templates/*', 'conf/*']
     },
     include_package_data=True,
+    extras_require=extras_require,
     test_suite='tests',
     zip_safe=False
 )
