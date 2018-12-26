@@ -1,0 +1,10 @@
+language: python
+
+python:
+  - "3.6"
+
+install:
+  - "pip install -e src"
+
+script:
+  - "PYTHONPATH=src python src/face_check/manage.py test"
