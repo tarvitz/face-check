@@ -77,12 +77,6 @@ class UtilsTestCase(unittest.TestCase):
     def test_rel(self):
         self.assertNotEqual(utils.rel('static'), '/static/')
 
-
-class RequiresTestCase(unittest.TestCase):
-    """
-    Test suite for requires
-    """
-
     @staticmethod
     def foo():
         return 'bar'
