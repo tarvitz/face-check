@@ -6,3 +6,6 @@ __pycache__
 **/db.sqlite3
 #: local build helper
 build.sh
+
+#: coverage reports
+src/htmlcov

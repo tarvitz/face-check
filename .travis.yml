@@ -5,11 +5,11 @@ python:
 
 install:
   - pip install -e src
-  - pip install coveralls pyyaml
+  - pip install coveralls pyyaml coverage
 
 script:
   - cd src
-  - python setup.py test
+  - coverage run setup.py test
 
 after_success:
   - coveralls
