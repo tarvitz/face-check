@@ -11,9 +11,5 @@ script:
   - cd src
   - python setup.py test
 
-install:
-  - pip install -e .
-  - pip install coveralls pyyaml
-
 after_success:
   - coveralls
