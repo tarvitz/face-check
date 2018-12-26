@@ -1,0 +1,15 @@
+language: python
+
+python:
+  - "3.6"
+
+install:
+  - pip install -e src
+  - pip install coveralls pyyaml coverage
+
+script:
+  - cd src
+  - coverage run setup.py test
+
+after_success:
+  - coveralls

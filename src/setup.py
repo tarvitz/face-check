@@ -1,8 +1,34 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import os
+import sys
 from setuptools import setup, find_packages
+from setuptools.command.test import test
 
 version = "0.1"
+
+
+class DjangoTest(test):
+    user_options = [("django-test-args=", "a", "Arguments to pass to pytest")]
+
+    def initialize_options(self):
+        test.initialize_options(self)
+        self.django_test_args = ""
+
+    def run_tests(self):
+        import django
+        from django.conf import settings
+        from django.test.utils import get_runner
+
+        os.environ['DJANGO_SETTINGS_MODULE'] = 'face_check.settings'
+        django.setup()
+
+        test_runner_class = get_runner(settings)
+        #: django.test.runner.DiscoverRunner, additional options does not
+        #: work for now
+        test_runner = test_runner_class()
+        failures = test_runner.run_tests(["tests"])
+        sys.exit(bool(failures))
 
 
 CLASSIFIERS = [
@@ -26,6 +52,7 @@ install_requires = [
     #: MIT licenses
     'python-twitch-client==0.6.0'
 ]
+test_requires = []
 
 
 class ExtraRequirements(object):
@@ -50,6 +77,7 @@ setup(
     platforms=['OS Independent'],
     classifiers=CLASSIFIERS,
     install_requires=install_requires,
+    test_requires=test_requires,
     packages=find_packages(
         exclude=('tests', 'resources')
     ),
@@ -64,5 +92,6 @@ setup(
     include_package_data=True,
     extras_require=extras_require,
     test_suite='tests',
-    zip_safe=False
+    zip_safe=False,
+    cmdclass={"django_test": DjangoTest}
 )

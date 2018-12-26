@@ -1,6 +1,13 @@
 WellPlayedTV Face Check
 =======================
 
+.. image:: https://travis-ci.org/tarvitz/face-check.svg?branch=master
+    :target: https://travis-ci.org/tarvitz/face-check
+
+.. image:: https://coveralls.io/repos/github/tarvitz/face-check/badge.svg?branch=master
+    :target: https://coveralls.io/github/tarvitz/face-check?branch=master
+
+
 .. contents::
   :local:
   :depth: 2
