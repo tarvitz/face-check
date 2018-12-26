@@ -2,6 +2,7 @@ __pycache__
 *.py[co]
 *.iml
 *.idea
+*.egg-info
 **/settings/local.py
 **/db.sqlite3
 #: local build helper
@@ -9,3 +10,4 @@ build.sh
 
 #: coverage reports
 src/htmlcov
+.coverage
