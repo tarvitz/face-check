@@ -7,4 +7,4 @@ install:
   - "pip install -e src"
 
 script:
-  - "PYTHONPATH=src python src/face_check/manage.py test"
+  - "cd src && PYTHONPATH=. python face_check/manage.py test"
