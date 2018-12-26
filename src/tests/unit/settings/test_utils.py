@@ -8,10 +8,12 @@ from face_check.settings import utils
 class MockEnv(object):
     """
     Helps to override os.environment with your settings
-    usage::
+    usage:
 
-    >>> with MockEnv({'ENV': 'Me'}):
-    ...    assert os.environ.get('ENV') == 'Me'
+    .. code-block:: python
+
+        with MockEnv({'ENV': 'Me'}):
+            assert os.environ.get('ENV') == 'Me'
     """
 
     def __init__(self, override):
@@ -74,3 +76,28 @@ class UtilsTestCase(unittest.TestCase):
 
     def test_rel(self):
         self.assertNotEqual(utils.rel('static'), '/static/')
+
+
+class RequiresTestCase(unittest.TestCase):
+    """
+    Test suite for requires
+    """
+
+    @staticmethod
+    def foo():
+        return 'bar'
+
+    def test_requires(self):
+        #: ok
+        self.assertEqual(utils.requires(['setuptools'])(self.foo)(), 'bar')
+        #: ok with partial dependency list
+        self.assertEqual(
+            utils.requires(['setuptools', 'non-existent-deps'],
+                           validator=any)(self.foo)(), 'bar'
+        )
+
+        #: skip due to insufficient dependency
+        self.assertEqual(
+            utils.requires(['non-existent-deps'])(self.foo)(),
+            None
+        )

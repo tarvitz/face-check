@@ -5,6 +5,7 @@ To boost settings work. In case if you would like
 
 import os
 import ast
+import pkg_resources
 
 PROJECT_ROOT_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -73,3 +74,31 @@ def get_env_string(env_key, fallback):
 
 def rel(path, base_dir=PROJECT_ROOT_DIR):
     return os.path.join(base_dir, path)
+
+
+def requires(dependencies, *, validator=all):
+    """
+    Checks if package has dependencies according to `validator` logic
+
+    :param list[str] | tuple[str] dependencies: list of dependencies without
+        its versions, for example: raven, requests, wheel, setuptools, etc
+    :param callable validator: boolean sequence validator, by default
+        it's :py:func:`all`. Recommended to use:
+
+        - :py:func:`all`
+        - :py:func:`any`
+    :return: decorator
+    """
+
+    #: a bit hacky, however setuptools is a root dependency anyway
+    distribution = pkg_resources.get_distribution('setuptools')
+    has_resource = distribution.has_resource
+
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            have_all_dependencies = validator(map(has_resource, dependencies))
+            if have_all_dependencies:
+                return func(*args, **kwargs)
+            return
+        return wrapper
+    return decorator
