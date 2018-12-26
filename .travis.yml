@@ -4,7 +4,16 @@ python:
   - "3.6"
 
 install:
-  - "pip install -e src"
+  - pip install -e src
+  - pip install coveralls pyyaml
 
 script:
-  - "cd src && PYTHONPATH=. python face_check/manage.py test"
+  - cd src
+  - python setup.py test
+
+install:
+  - pip install -e .
+  - pip install coveralls pyyaml
+
+after_success:
+  - coveralls
