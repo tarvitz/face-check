@@ -4,3 +4,5 @@ __pycache__
 *.idea
 **/settings/local.py
 **/db.sqlite3
+#: local build helper
+build.sh

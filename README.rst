@@ -84,6 +84,21 @@ To build current version of application simple run `./hack/build.sh`.
     You will require `winpty <https://github.com/rprichard/winpty>`_
     if you run it on Windows Msys (git for windows base environment)
 
+Extra Dependencies
+``````````````````
+Passing *--build-arg=PIP_EXTRA_DEPENDENCIES=extras* will allow you to install extra project dependencies you won't probably need out of a box.
+
+If you if you want to install with all extra dependencies
+
+Here's supported list of dependencies:
+
+- **all**, enables all extra dependencies listed below.
+- **raven**, enables `sentry <https://getsentry.com>`_ logging
+
+Example::
+
+    $ ./hack/build.sh --build-arg="PIP_EXTRA_DEPENDENCIES=raven"
+
 Tests
 ~~~~~
 This project includes bunch of unit and story (i.e integration or functional) test

@@ -236,6 +236,16 @@ DEFAULT_FROM_EMAIL = get_env_string(
     'DEFAULT_FROM_EMAIL', 'AstroPath (no replay) <astropath@blacklibrary.ru>'
 )
 
+#: Default settings for extras
+
+#: logging
+RAVEN_CONFIG = {
+    'dsn': get_env_string('SENTRY_DSN', ''),
+    # If you are using git, you can also automatically configure the
+    # release based on the git info.
+    'release': '0.1',
+}
+
 #: import secrets settings
 try:
     from . secrets import *  # NOQA
