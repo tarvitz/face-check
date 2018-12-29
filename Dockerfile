@@ -39,6 +39,6 @@ RUN set -x \
 
 CMD gunicorn face_check.wsgi:application \
         --log-level=info \
-        --bind 0.0.0.0:8000 \
-        --name grart \
-        --pid /gunicorn.pid \
+        --bind=0.0.0.0:8000 \
+        --name=face-check \
+        --pid=/gunicorn.pid \
