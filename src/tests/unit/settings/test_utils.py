@@ -1,36 +1,8 @@
-import os
 import unittest
 
-from unittest import mock
 from face_check.settings import utils
 
-
-class MockEnv(object):
-    """
-    Helps to override os.environment with your settings
-    usage:
-
-    .. code-block:: python
-
-        with MockEnv({'ENV': 'Me'}):
-            assert os.environ.get('ENV') == 'Me'
-    """
-
-    def __init__(self, override):
-        """
-        :param dict override: override os.environment
-        """
-        self.override = override
-        self._event = None
-
-    def __enter__(self):
-        self._event = mock.patch.dict(os.environ, self.override)
-        self._event.start()
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self._event.stop()
-        return
+from ... import MockEnv
 
 
 class UtilsTestCase(unittest.TestCase):

@@ -5,6 +5,7 @@ import sys
 from setuptools import setup, find_packages
 from setuptools.command.test import test
 
+#: consider using setuptools_scm instead of declaring static version
 version = "0.1"
 
 
@@ -84,6 +85,7 @@ setup(
     entry_points={
         'console_scripts': [
             'site-manage = face_check.manage:main',
+            'wsgi-server = face_check.server.__main__:main'
         ]
     },
     package_data={

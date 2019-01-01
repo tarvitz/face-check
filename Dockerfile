@@ -1,7 +1,7 @@
 ARG SOURCE_IMAGE="python:3.6-alpine3.8"
 FROM ${SOURCE_IMAGE} as builder
 
-RUN apk add --no-cache gcc musl-dev postgresql-dev \
+RUN apk add --no-cache gcc musl-dev postgresql-dev libev-dev \
     && mkdir -p /build/package/dependencies
 
 RUN cd /build/ \
@@ -9,6 +9,11 @@ RUN cd /build/ \
     && tar xvzf psycopg2-*.tar.gz -C . \
     && rm -f *.tar.gz \
     && cd psycopg2*/ \
+    && python setup.py bdist_wheel --dist-dir=/build/package/dependencies/
+RUN cd /build \
+    && pip download bjoern \
+    && tar xvzf bjoern*.tar.gz -C . \
+    && cd bjoern* / \
     && python setup.py bdist_wheel --dist-dir=/build/package/dependencies/
 WORKDIR /opt/build
 
@@ -20,12 +25,12 @@ FROM ${SOURCE_IMAGE}
 MAINTAINER "Nickolas Fox <tarvitz@blacklibrary.ru>"
 LABEL net.w40k.app="face-check" \
       net.w40k.description="well played tv face check resource"
-RUN apk add --no-cache ca-certificates libpq
+RUN apk add --no-cache ca-certificates libpq libev
 
 COPY --from=builder /build/package/ /build/
 
 #: install binary dependencies and global runtime
-RUN pip install /build/dependencies/* gunicorn
+RUN pip install /build/dependencies/*
 
 ARG PIP_EXTRA_DEPENDENCIES
 ENV PIP_EXTRA_DEPENDENCIES=${PIP_EXTRA_DEPENDENCIES:-""}
@@ -37,8 +42,9 @@ RUN set -x \
          && pip install ${package}[${PIP_EXTRA_DEPENDENCIES}] ;\
        fi
 
-CMD gunicorn face_check.wsgi:application \
-        --log-level=info \
-        --bind=0.0.0.0:8000 \
-        --name=face-check \
-        --pid=/gunicorn.pid \
+#: in case of something weird use gunicorn with following options
+#: gunicorn face_check.wsgi:application --log-level=info --bind=0.0.0.0:8000 \
+#:        --pid=/gunicorn.pid
+
+#: bjoern wsgi server settings
+CMD wsgi-server
