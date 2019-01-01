@@ -32,7 +32,7 @@ SECRET_KEY = get_env_string(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = get_env_bool('DEBUG', False)
 
-ALLOWED_HOSTS = get_env_string('ALLOWED_HOSTS', '').split(',')
+ALLOWED_HOSTS = get_env_string('ALLOWED_HOSTS', 'localhost').split(',')
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.twitch.TwitchOAuth2',
     'social_core.backends.google.GoogleOAuth2',

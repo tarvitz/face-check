@@ -53,7 +53,10 @@ spec:
             - mountPath: /static/
               name: static-volume
               readOnly: true
-
+          resources:
+            limits:
+              cpu: 200m
+              memory: 128Mi
           #: health section
           readinessProbe:
             httpGet:

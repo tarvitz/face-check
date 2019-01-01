@@ -1,10 +1,40 @@
 import os
 import json
 
+from unittest import mock
+
 from face_check.consts import HttpStatus
 
 _BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 RESOURCE_DIR = os.path.join(_BASE_DIR, 'resources/tests')
+
+
+class MockEnv(object):
+    """
+    Helps to override os.environment with your settings
+    usage:
+
+    .. code-block:: python
+
+        with MockEnv({'ENV': 'Me'}):
+            assert os.environ.get('ENV') == 'Me'
+    """
+
+    def __init__(self, override):
+        """
+        :param dict override: override os.environment
+        """
+        self.override = override
+        self._event = None
+
+    def __enter__(self):
+        self._event = mock.patch.dict(os.environ, self.override)
+        self._event.start()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self._event.stop()
+        return
 
 
 class ResourceMixin(object):
