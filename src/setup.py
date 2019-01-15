@@ -48,7 +48,7 @@ CLASSIFIERS = [
 
 install_requires = [
     #: BSD licenses
-    'Django==2.1.4',
+    'Django==2.1.5',
     'social-auth-app-django==3.1.0',
     #: MIT licenses
     'python-twitch-client==0.6.0'
