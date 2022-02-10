@@ -48,7 +48,7 @@ CLASSIFIERS = [
 
 install_requires = [
     #: BSD licenses
-    'Django==2.2.24',
+    'Django==2.2.27',
     'social-auth-app-django==3.1.0',
     'social-auth-core==2.0.0',
     #: MIT licenses
